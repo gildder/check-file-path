@@ -42,7 +42,7 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) in
 
 ## :checkered_flag: Starting ##
 
-```bash
+```powershell
 # Clone this project
 $ git clone https://github.com/gildder/check-file-path
 
@@ -54,12 +54,22 @@ $ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 $ Install-Module -Name Selenium -Scope CurrentUser
 
+## Configuración del Script
 
+# File paths to check (replace with actual path)
+$Global:paths = @("YOUR_PATH_HERE")
+
+# List of control phones (replaces with actual numbers)
+$Global:numbers = @("+123456789")
+
+# ChromeDriver path (replaces with actual path)
+$Global:PathChromeDriver = "YOUR_CHROME_DRIVER_PATH_HERE"
 
 # Run the project
-$ yarn start
+$ cd src/
 
-# The server will initialize in the <http://localhost:3000>
+$ .\main.ps1
+
 ```
 
 ## :memo: License ##
