@@ -1,19 +1,20 @@
 function File-Checker {
     param (
         [array]$paths,
-        [datetime]$limitDate
+        [string]$limitDate
     )
 
     
     foreach($path in $paths){
         if(Test-Path $path) {
-            $creationDate = (Get-Item $path).CreationTime.Date
+            $creationDate = Get-DateFile -FilePath $path
+
             if($creationDate -eq $limitDate) {
-                Write-Output "The file at $path is created before the today."
+                Write-Output "The file at $path is created today."
             }else{
-                Write-Output "The file at $path was created before the specified limit date."
+                Write-Output "The file at $path was created before the specified limit date of $limitDate."
                 foreach($number in $Global:numbers){
-                    New-WhatsMessage -number $number -message "The file at $path was created before the specified limit date."
+                    New-WhatsMessage -number $number -message "The file at $path was created before the specified limit date of $limitDate."
                 }
             }
         } else {
@@ -23,4 +24,22 @@ function File-Checker {
             }
         }
     }
+}
+
+function Get-DateFile {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$FilePath
+    )
+
+    $file = Get-Item $FilePath
+    Write-Debug "Param $FilePath"
+
+    if ($file.LastWriteTime -ne $null) {
+        $finalDate = $file.LastWriteTime.ToString("dd/MM/yyyy", [System.Globalization.CultureInfo]::GetCultureInfo("es-ES"))
+    } else {
+        $finalDate = $file.CreationTime.ToString("dd/MM/yyyy", [System.Globalization.CultureInfo]::GetCultureInfo("es-ES"))
+    }
+
+    return $finalDate    
 }
