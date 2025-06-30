@@ -14,3 +14,56 @@
 # Projects
 *.csv
 *.zip
+
+# Environment variables and sensitive data
+.env
+
+# PowerShell execution logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Chrome profile data
+**/ChromeProfile/
+
+# User-specific configuration files
+config.local.ps1
+settings.local.ps1
+
+# Output files
+output/
+logs/
+
+# Backup files
+*.bak
+*.backup
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Test results
+TestResults/
+*.trx
+
+# Build outputs
+bin/
+obj/
+dist/
+
+# Package manager
+node_modules/
+packages/
+
+# Sensitive data
+secrets/
+private/
+credentials/

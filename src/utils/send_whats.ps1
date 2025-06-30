@@ -14,7 +14,7 @@ function Send-Message {
 
         # Use WebDriverWait to wait until the message field is visible
         Add-Type -AssemblyName "WebDriver.Support"
-        $wait = New-Object OpenQA.Selenium.Support.UI.WebDriverWait($Driver, [TimeSpan]::FromSeconds(20))
+        $wait = New-Object OpenQA.Selenium.Support.UI.WebDriverWait($Driver, [TimeSpan]::FromSeconds(120))
         $wait.Until([OpenQA.Selenium.Support.UI.ExpectedConditions]::ElementExists([OpenQA.Selenium.By]::XPath("//div[@aria-placeholder='Escribe un mensaje' and @contenteditable='true']")))
 
         # Find the message field
@@ -45,13 +45,11 @@ function New-WhatsMessage {
     $driverPath = $Global:PathChromeDriver
 
     # Configure the ChromeDriver service
-    $service = [OpenQA.Selenium.Chrome.ChromeDriverService]::CreateDefaultService($driverPath)
-
-    # Configure Chrome options
+    $service = [OpenQA.Selenium.Chrome.ChromeDriverService]::CreateDefaultService($driverPath)    # Configure Chrome options
     $chromeOptions = New-Object OpenQA.Selenium.Chrome.ChromeOptions
     $chromeOptions.AddArgument("--headless")
     $chromeOptions.AddArgument("--disable-gpu")
-    $chromeOptions.AddArgument("--user-data-dir=C:\Temp\ChromeProfile")
+    $chromeOptions.AddArgument("--user-data-dir=$($Global:ChromeProfileDir)")
 
     try {
         $Driver = New-Object OpenQA.Selenium.Chrome.ChromeDriver($service, $chromeOptions)
@@ -59,7 +57,7 @@ function New-WhatsMessage {
         $Driver.Navigate().GoToUrl("https://web.whatsapp.com/")
         Write-Host "Navigation to WhatsApp Web completed. Scan the QR code to log in."
 
-        Start-Sleep -Seconds 10
+        Start-Sleep -Seconds 45
 
         # Send WhatsApp message
         Send-Message -number $number -message $message

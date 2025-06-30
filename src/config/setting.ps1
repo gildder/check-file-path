@@ -1,8 +1,18 @@
-# File paths to verify (replace with actual path)
-$Global:paths = @("YOUR_PATH_HERE")
+# Load environment variables
+. "$PSScriptRoot\env-loader.ps1"
+Load-Environment
 
-# List of control telephones (replace with actual numbers)
-$Global:numbers = @("+123456789")
+# File paths to verify (loaded from environment variables)
+$Global:paths = Get-PathsFromEnvironment
 
-# Path of ChromeDriver (replace with actual path)
-$Global:PathChromeDriver = "YOUR_CHROME_DRIVER_PATH_HERE"
+# List of control telephones (loaded from environment variables)
+$Global:numbers = Get-PhoneNumbersFromEnvironment
+
+# Path of ChromeDriver (loaded from environment variables)
+$Global:PathChromeDriver = Get-EnvironmentVariable -Name "CHROME_DRIVER_PATH"
+
+# Path of batch file to execute on errors (optional)
+$Global:BatchFilePath = Get-EnvironmentVariable -Name "BATCH_FILE_PATH" -DefaultValue ""
+
+# Chrome profile directory
+$Global:ChromeProfileDir = Get-EnvironmentVariable -Name "CHROME_PROFILE_DIR" -DefaultValue "C:\Temp\ChromeProfile"

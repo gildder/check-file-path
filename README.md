@@ -49,25 +49,66 @@ $ git clone https://github.com/gildder/check-file-path
 # Access
 $ cd check-file-path
 
+# Configure environment variables
+$ cp .env.example .env
+# Edit .env file with your specific settings
+
 # Install dependencies
 $ Install-Module -Name Pester -Force -SkipPublisherCheck
-
 $ Install-Module -Name Selenium -Scope CurrentUser
 
-## Configuración del Script
+## 🔧 Configuration ##
 
-# File paths to check (replace with actual path)
-$Global:paths = @("YOUR_PATH_HERE")
+This project uses environment variables for secure configuration. Follow these steps:
 
-# List of control phones (replaces with actual numbers)
-$Global:numbers = @("+123456789")
+### 1. Environment Setup
 
-# ChromeDriver path (replaces with actual path)
-$Global:PathChromeDriver = "YOUR_CHROME_DRIVER_PATH_HERE"
+Copy the example environment file and configure it:
 
-# Run the project
+```bash
+cp .env.example .env
+```
+
+### 2. Edit .env file
+
+Configure the following variables in your `.env` file:
+
+```env
+# File paths to verify (comma-separated)
+FILE_PATHS=C:\path\to\file1.csv,C:\path\to\file2.txt
+
+# Phone numbers for WhatsApp notifications (comma-separated, international format)
+PHONE_NUMBERS=+1234567890,+0987654321
+
+# ChromeDriver path (download from https://chromedriver.chromium.org/)
+CHROME_DRIVER_PATH=C:\WebDriver
+
+# Optional: Batch file to execute on errors
+BATCH_FILE_PATH=C:\path\to\script.bat
+
+# Chrome profile directory
+CHROME_PROFILE_DIR=C:\Temp\ChromeProfile
+
+# Security: Allowed paths for file validation (comma-separated, use * for wildcards)
+ALLOWED_PATHS=C:\Multicenter_Netsuite\*,C:\Temp\*,C:\WebDriver\*
+```
+
+### 3. Security Features
+
+- ✅ **Environment Variables**: Sensitive data is stored in `.env` files
+- ✅ **Git Ignore**: `.env` files are excluded from version control
+- ✅ **Path Validation**: Built-in security checks for file paths with configurable allowed directories
+- ✅ **Phone Number Validation**: Format validation for phone numbers
+- ✅ **Template Configuration**: `.env.example` provides setup guidance
+- ✅ **Configurable Security**: Security policies are configurable via environment variables
+
+### 4. Running the Project
+
+```powershell
+# Navigate to source directory
 $ cd src/
 
+# Run the main script
 $ .\main.ps1
 
 ```
