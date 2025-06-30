@@ -1,5 +1,5 @@
 # Load configuration and validate
-. "$PSScriptRoot/config/validator.ps1"
+. "$PSScriptRoot\config\validator.ps1"
 
 # Validate configuration before proceeding
 if (-not (Test-Configuration)) {

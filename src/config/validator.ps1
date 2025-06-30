@@ -1,8 +1,8 @@
 # Configuration Validator
 # This script validates the environment configuration before running the main application
 
-. "$PSScriptRoot\config\env-loader.ps1"
-. "$PSScriptRoot\config\security.ps1"
+. "$PSScriptRoot\env-loader.ps1"
+. "$PSScriptRoot\security.ps1"
 
 function Test-Configuration {
     Write-Host "🔍 Validating configuration..." -ForegroundColor Yellow
