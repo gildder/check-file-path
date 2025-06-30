@@ -1,10 +1,25 @@
-Import-Module Selenium
+# Try to import Selenium module, but don't fail if it's not available
+try {
+    Import-Module Selenium -ErrorAction Stop
+    $Global:SeleniumAvailable = $true
+} catch {
+    Write-Warning "Selenium module not found. WhatsApp functionality will be disabled."
+    Write-Host "To enable WhatsApp notifications, install Selenium: Install-Module -Name Selenium" -ForegroundColor Yellow
+    $Global:SeleniumAvailable = $false
+}
 
 function Send-Message {
     param (
         [string]$number,
         [string]$message
     )
+
+    # Check if Selenium is available
+    if (-not $Global:SeleniumAvailable) {
+        Write-Warning "Cannot send WhatsApp message: Selenium module not available"
+        Write-Host "Message that would be sent to $number : $message" -ForegroundColor Yellow
+        return
+    }
 
     $numberFormat = $number -replace '\+', '' 
 

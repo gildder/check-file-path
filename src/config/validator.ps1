@@ -5,7 +5,7 @@
 . "$PSScriptRoot\security.ps1"
 
 function Test-Configuration {
-    Write-Host "🔍 Validating configuration..." -ForegroundColor Yellow
+    Write-Host "Validating configuration..." -ForegroundColor Yellow
     
     $isValid = $true
     
@@ -14,7 +14,7 @@ function Test-Configuration {
     
     try {
         # Test file paths
-        Write-Host "📁 Checking file paths..." -ForegroundColor Cyan
+        Write-Host "Checking file paths..." -ForegroundColor Cyan
         $paths = Get-PathsFromEnvironment
         
         if ($paths.Count -eq 0) {
@@ -26,11 +26,11 @@ function Test-Configuration {
                     $isValid = $false
                 }
             }
-            Write-Host "✅ File paths validated: $($paths.Count) paths configured" -ForegroundColor Green
+            Write-Host "File paths validated: $($paths.Count) paths configured" -ForegroundColor Green
         }
         
         # Test phone numbers
-        Write-Host "📱 Checking phone numbers..." -ForegroundColor Cyan
+        Write-Host "Checking phone numbers..." -ForegroundColor Cyan
         $numbers = Get-PhoneNumbersFromEnvironment
         
         if ($numbers.Count -eq 0) {
@@ -42,22 +42,22 @@ function Test-Configuration {
                     $isValid = $false
                 }
             }
-            Write-Host "✅ Phone numbers validated: $($numbers.Count) numbers configured" -ForegroundColor Green
+            Write-Host "Phone numbers validated: $($numbers.Count) numbers configured" -ForegroundColor Green
         }
         
         # Test ChromeDriver path
-        Write-Host "🌐 Checking ChromeDriver..." -ForegroundColor Cyan
+        Write-Host "Checking ChromeDriver..." -ForegroundColor Cyan
         $chromeDriverPath = Get-EnvironmentVariable -Name "CHROME_DRIVER_PATH"
         
         if (-not (Test-Path $chromeDriverPath)) {
             Write-Error "ChromeDriver path does not exist: $chromeDriverPath"
             $isValid = $false
         } else {
-            Write-Host "✅ ChromeDriver path validated" -ForegroundColor Green
+            Write-Host "ChromeDriver path validated" -ForegroundColor Green
         }
         
         # Test Chrome profile directory
-        Write-Host "📂 Checking Chrome profile directory..." -ForegroundColor Cyan
+        Write-Host "Checking Chrome profile directory..." -ForegroundColor Cyan
         $profileDir = Get-EnvironmentVariable -Name "CHROME_PROFILE_DIR" -DefaultValue "C:\Temp\ChromeProfile"
         
         $parentDir = Split-Path $profileDir -Parent
@@ -66,16 +66,16 @@ function Test-Configuration {
             Write-Host "Creating parent directory..." -ForegroundColor Yellow
             New-Item -ItemType Directory -Path $parentDir -Force -ErrorAction SilentlyContinue
         }
-        Write-Host "✅ Chrome profile directory validated" -ForegroundColor Green
+        Write-Host "Chrome profile directory validated" -ForegroundColor Green
         
         # Test allowed paths configuration
-        Write-Host "🔒 Checking security configuration..." -ForegroundColor Cyan
+        Write-Host "Checking security configuration..." -ForegroundColor Cyan
         $allowedPaths = Get-AllowedPathsFromEnvironment
         
         if ($allowedPaths.Count -eq 0) {
-            Write-Host "⚠️  No allowed paths configured - security validation will be skipped" -ForegroundColor Yellow
+            Write-Host "No allowed paths configured - security validation will be skipped" -ForegroundColor Yellow
         } else {
-            Write-Host "✅ Security paths configured: $($allowedPaths.Count) allowed path patterns" -ForegroundColor Green
+            Write-Host "Security paths configured: $($allowedPaths.Count) allowed path patterns" -ForegroundColor Green
             Write-Debug "Allowed paths: $($allowedPaths -join ', ')"
         }
         
@@ -85,14 +85,11 @@ function Test-Configuration {
     }
     
     if ($isValid) {
-        Write-Host "🎉 Configuration validation successful!" -ForegroundColor Green
+        Write-Host "Configuration validation successful!" -ForegroundColor Green
     } else {
-        Write-Host "❌ Configuration validation failed. Please check your .env file." -ForegroundColor Red
-        Write-Host "💡 Tip: Copy .env.example to .env and configure your settings" -ForegroundColor Yellow
+        Write-Host "Configuration validation failed. Please check your .env file." -ForegroundColor Red
+        Write-Host "Tip: Copy .env.example to .env and configure your settings" -ForegroundColor Yellow
     }
     
     return $isValid
 }
-
-# Export function for use in other scripts
-Export-ModuleMember -Function Test-Configuration

@@ -28,12 +28,12 @@ function Load-Environment {
 function Get-EnvironmentVariable {
     param (
         [string]$Name,
-        [string]$DefaultValue = ""
+        [string]$DefaultValue = $null
     )
     
     $value = [System.Environment]::GetEnvironmentVariable($Name, 'Process')
     if ([string]::IsNullOrEmpty($value)) {
-        if (![string]::IsNullOrEmpty($DefaultValue)) {
+        if ($null -ne $DefaultValue) {
             return $DefaultValue
         } else {
             throw "Environment variable '$Name' is required but not set. Please check your .env file."
