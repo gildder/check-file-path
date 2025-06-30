@@ -49,6 +49,9 @@ $ git clone https://github.com/gildder/check-file-path
 # Access
 $ cd check-file-path
 
+# IMPORTANT: Unblock ALL PowerShell script files (required after downloading from GitHub)
+$ Get-ChildItem -Path "." -Recurse -Filter "*.ps1" | Unblock-File
+
 # Configure environment variables
 $ cp .env.example .env
 # Edit .env file with your specific settings
