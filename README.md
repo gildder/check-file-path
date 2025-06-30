@@ -134,8 +134,6 @@ Please read our [Security Policy](SECURITY.md) for information about reporting s
 
 See [Releases](https://github.com/gildder/check-file-path/releases) for a list of changes in each version.
 
-```
-
 ## :memo: License ##
 
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
