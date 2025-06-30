@@ -80,7 +80,7 @@ FILE_PATHS=C:\path\to\file1.csv,C:\path\to\file2.txt
 # Phone numbers for WhatsApp notifications (comma-separated, international format)
 PHONE_NUMBERS=+1234567890,+0987654321
 
-# ChromeDriver path (download from https://chromedriver.chromium.org/)
+# ChromeDriver path (download from https://chromedriver.chromium.org/ or https://googlechromelabs.github.io/chrome-for-testing/#stable)
 CHROME_DRIVER_PATH=C:\WebDriver
 
 # Optional: Batch file to execute on errors
@@ -90,7 +90,7 @@ BATCH_FILE_PATH=C:\path\to\script.bat
 CHROME_PROFILE_DIR=C:\Temp\ChromeProfile
 
 # Security: Allowed paths for file validation (comma-separated, use * for wildcards)
-ALLOWED_PATHS=C:\Multicenter_Netsuite\*,C:\Temp\*,C:\WebDriver\*
+ALLOWED_PATHS=C:\YourProject\*,C:\Temp\*,C:\WebDriver\*
 ```
 
 ### 3. Security Features
@@ -110,6 +110,29 @@ $ cd src/
 
 # Run the main script
 $ .\main.ps1
+```
+
+## 🧪 Testing ##
+
+```powershell
+# Run all tests
+$ Invoke-Pester .\tests\
+
+# Run specific test
+$ Invoke-Pester .\tests\file_checker.test.ps1
+```
+
+## 🤝 Contributing ##
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 🔒 Security ##
+
+Please read our [Security Policy](SECURITY.md) for information about reporting security vulnerabilities.
+
+## 📝 Changelog ##
+
+See [Releases](https://github.com/gildder/check-file-path/releases) for a list of changes in each version.
 
 ```
 

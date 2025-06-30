@@ -1,0 +1,146 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup PowerShell
+      shell: pwsh
+      run: |
+        Write-Host "PowerShell version: $($PSVersionTable.PSVersion)"
+        
+    - name: Install Dependencies
+      shell: pwsh
+      run: |
+        Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
+        Install-Module -Name Selenium -Scope CurrentUser -Force -AllowClobber
+        
+    - name: Create test environment
+      shell: pwsh
+      run: |
+        # Create test .env file
+        Copy-Item ".env.example" ".env"
+        
+        # Create test directories
+        New-Item -ItemType Directory -Path "C:\Temp" -Force -ErrorAction SilentlyContinue
+        New-Item -ItemType Directory -Path "C:\Temp\ChromeProfile" -Force -ErrorAction SilentlyContinue
+        
+    - name: Run PowerShell Tests
+      shell: pwsh
+      run: |
+        # Run tests with detailed output
+        $testResults = Invoke-Pester -Path ".\tests\" -OutputFormat NUnitXml -OutputFile "test-results.xml" -PassThru
+        
+        if ($testResults.FailedCount -gt 0) {
+          Write-Error "Tests failed: $($testResults.FailedCount) failed, $($testResults.PassedCount) passed"
+          exit 1
+        } else {
+          Write-Host "All tests passed: $($testResults.PassedCount) tests" -ForegroundColor Green
+        }
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: test-results.xml
+        
+    - name: Code Analysis
+      shell: pwsh
+      run: |
+        # Basic code analysis - check for potential issues
+        Write-Host "Running basic code analysis..." -ForegroundColor Yellow
+        
+        # Check for hardcoded secrets (basic check)
+        $sourceFiles = Get-ChildItem -Path ".\src\" -Recurse -Filter "*.ps1"
+        foreach ($file in $sourceFiles) {
+          $content = Get-Content $file.FullName -Raw
+          
+          # Check for potential hardcoded values
+          if ($content -match '\+\d{10,15}') {
+            Write-Warning "Potential hardcoded phone number in $($file.Name)"
+          }
+          
+          if ($content -match 'C:\\[^$\s]*\\[^$\s]*') {
+            Write-Warning "Potential hardcoded path in $($file.Name)"
+          }
+        }
+        
+        Write-Host "Code analysis completed" -ForegroundColor Green
+
+  security-scan:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Security Scan
+      shell: pwsh
+      run: |
+        Write-Host "Running security checks..." -ForegroundColor Yellow
+        
+        # Check .gitignore includes .env
+        if (!(Get-Content ".gitignore" | Select-String -Pattern "\.env")) {
+          Write-Error ".env not found in .gitignore"
+          exit 1
+        }
+        
+        # Check for .env file in repository (should not exist)
+        if (Test-Path ".env") {
+          Write-Error ".env file found in repository - this should not be committed"
+          exit 1
+        }
+        
+        # Check for .env.example
+        if (!(Test-Path ".env.example")) {
+          Write-Error ".env.example not found"
+          exit 1
+        }
+        
+        Write-Host "Security checks passed" -ForegroundColor Green
+
+  documentation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check Documentation
+      run: |
+        echo "Checking documentation completeness..."
+        
+        # Check required files exist
+        required_files=("README.md" "LICENSE.md" "SECURITY.md" "CONTRIBUTING.md")
+        
+        for file in "${required_files[@]}"; do
+          if [[ ! -f "$file" ]]; then
+            echo "❌ Missing required file: $file"
+            exit 1
+          else
+            echo "✅ Found: $file"
+          fi
+        done
+        
+        # Check if files are not empty
+        for file in "${required_files[@]}"; do
+          if [[ ! -s "$file" ]]; then
+            echo "❌ Empty file: $file"
+            exit 1
+          else
+            echo "✅ Non-empty: $file"
+          fi
+        done
+        
+        echo "📚 Documentation checks passed"
