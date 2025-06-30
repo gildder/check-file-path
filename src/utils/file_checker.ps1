@@ -1,4 +1,4 @@
-function File-Checker {
+function Test-FileChecker {
     param (
         [array]$paths,
         [string]$limitDate

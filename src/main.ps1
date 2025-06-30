@@ -17,7 +17,7 @@ Write-Host "Starting file verification process..." -ForegroundColor Green
 
 $limitDate = (Get-Date).ToString("dd/MM/yyyy", [System.Globalization.CultureInfo]::GetCultureInfo("es-ES"))
 
-File-Checker -paths $Global:paths -limitDate $limitDate
+Test-FileChecker -paths $Global:paths -limitDate $limitDate
 
 Write-Host "File verification completed. This message will disappear in 5 seconds." -ForegroundColor Green
 Start-Sleep -Seconds 5
