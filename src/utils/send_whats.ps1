@@ -62,7 +62,7 @@ function New-WhatsMessage {
     # Configure the ChromeDriver service
     $service = [OpenQA.Selenium.Chrome.ChromeDriverService]::CreateDefaultService($driverPath)    # Configure Chrome options
     $chromeOptions = New-Object OpenQA.Selenium.Chrome.ChromeOptions
-    # $chromeOptions.AddArgument("--headless")
+    $chromeOptions.AddArgument("--headless")
     $chromeOptions.AddArgument("--disable-gpu")
     $chromeOptions.AddArgument("--user-data-dir=$($Global:ChromeProfileDir)")
 
